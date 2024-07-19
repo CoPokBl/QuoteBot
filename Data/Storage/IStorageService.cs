@@ -8,4 +8,5 @@ public interface IStorageService {
     void SetQuoteSettings(ulong guild, ulong channel, string form);
     ulong? GetQuoteChannel(ulong guild);
     string? GetQuoteForm(ulong guild);
+    Quote? GetRandomQuote(ulong guild);
 }

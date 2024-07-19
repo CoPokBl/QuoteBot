@@ -77,4 +77,22 @@ CREATE TABLE IF NOT EXISTS guild_configs (
         }
         return reader.GetString(0);
     }
+
+    public Quote? GetRandomQuote(ulong guild) {
+        using SQLiteCommand cmd = new("SELECT quoter, quotee, message_id, quote, quoted_message_channel, quoted_message_id FROM quotes WHERE guild = @guild ORDER BY RANDOM() LIMIT 1;", _connection);
+        cmd.Parameters.AddWithValue("guild", guild.ToString());
+        using SQLiteDataReader reader = cmd.ExecuteReader();
+        if (!reader.Read()) {
+            return null;
+        }
+        return new Quote(
+            ulong.Parse(reader.GetString(0)),
+            reader.GetString(1),
+            guild,
+            ulong.Parse(reader.GetString(2)),
+            reader.GetString(3),
+            ulong.Parse(reader.GetString(4)),
+            ulong.Parse(reader.GetString(5))
+        );
+    }
 }
